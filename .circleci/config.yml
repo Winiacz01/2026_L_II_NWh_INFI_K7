@@ -1,13 +1,16 @@
 version: 2.1
 jobs:
-  build-and-test:
+  build-and-push:
     machine:
-      image: ubuntu-2004:current
+      docker_layer_caching: true
     steps:
       - checkout
-      - run: make deps
-      - run: make test
-      - run: make docker_build   
+      - setup_remote_docker:
+          version: 20.10.7
+          docker_layer_caching: true
+      - run:
+          name: Push Docker image
+          command: make docker_push 
 workflows:
   basic:
     jobs:
